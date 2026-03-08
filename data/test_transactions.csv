@@ -1,0 +1,14 @@
+seller,buyer,amount,gst,director
+Company_A,Company_B,200000,36000,Ramesh
+Company_B,Company_C,200000,36000,Suresh
+Company_C,Company_A,200000,36000,Mukesh
+Shell_1,Target_Corp,50000,9000,Fraudster
+Shell_2,Target_Corp,50000,9000,Fraudster
+Shell_3,Target_Corp,50000,9000,Fraudster
+Shell_4,Target_Corp,50000,9000,Fraudster
+Small_Vendor,MegaCorp,20000000,3600000,Vendor_CEO
+MegaCorp,Small_Vendor_2,20000000,3600000,Vendor_CEO
+Legit_Firm,Customer_1,10000,1800,Legit_Dir
+Legit_Firm,Customer_2,5000,900,Legit_Dir
+Tech_Agency,Local_Store,25000,4500,Tech_Dir
+Local_Store,Customer_3,2000,360,Store_Dir

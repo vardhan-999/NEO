@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+networkx
+pandas
+pymongo
+motor
+python-multipart
+pydantic
