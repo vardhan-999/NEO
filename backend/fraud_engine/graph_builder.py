@@ -46,6 +46,11 @@ def get_graph_data():
         nodes.append({"id": n, "group": data.get("type", "Unknown")})
         
     for u, v, data in G.edges(data=True):
-        edges.append({"source": u, "target": v, "label": data.get("type", "")})
+        edge_data = {"source": u, "target": v, "label": data.get("type", "")}
+        if "amount" in data:
+            edge_data["amount"] = data["amount"]
+        if "gst" in data:
+            edge_data["gst"] = data["gst"]
+        edges.append(edge_data)
         
     return {"nodes": nodes, "links": edges}
