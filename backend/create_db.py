@@ -2,7 +2,7 @@ import psycopg2
 import urllib.parse
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
-password = urllib.parse.quote_plus('Anji@521')
+password = urllib.parse.quote_plus('password')
 conn = psycopg2.connect(f"postgresql://postgres:{password}@localhost:5432/postgres")
 conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 cur = conn.cursor()

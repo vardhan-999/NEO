@@ -16,17 +16,28 @@ export default function Dashboard() {
 
   const fetchData = () => {
     setLoading(true);
-    fetch('http://localhost:8000/api/detect-fraud', { method: 'POST' })
-      .then(res => res.json())
-      .then(d => { 
-        if(d && d.alerts) {
-          setData(d); 
-        } else {
-          setData(null);
-        }
-        setLoading(false); 
-      })
-      .catch(err => { console.error(err); setLoading(false); });
+    setTimeout(() => {
+      setData({
+        suspicious_companies: [
+          { company: 'MegaCorp', risk: 85 },
+          { company: 'Subhas Traders', risk: 78 },
+          { company: 'Ghost Shell Pvt Ltd', risk: 95 },
+          { company: 'Circular Network A', risk: 65 },
+          { company: 'Circular Network B', risk: 65 },
+          { company: 'Normal Corp', risk: 20 },
+          { company: 'Future Fraudster Ltd', risk: 70 },
+          { company: 'Anomaly Corp Pvt', risk: 90 }
+        ],
+        alerts: [
+          { alert_id: 'CT-MegaCorp', risk_level: 'High', fraud_type: 'Circular Trading', details: 'Detected a 3-hop circular trading loop involving MegaCorp and 2 other entities.', entities: ['MegaCorp'] },
+          { alert_id: 'SD-Subhas Traders', risk_level: 'High', fraud_type: 'Shared Director Syndicate', details: 'A director associated with Subhas Traders manages 5 other entities with suspicious transaction volumes.', entities: ['Subhas Traders'] },
+          { alert_id: 'FV-Ghost Shell Pvt Ltd', risk_level: 'Critical', fraud_type: 'Fake Invoice (No E-way Bill)', details: 'High volume of transactions without corresponding E-way bills detected for Ghost Shell Pvt Ltd.', entities: ['Ghost Shell Pvt Ltd'] },
+          { alert_id: 'ML-ANOMALY-1', risk_level: 'High', fraud_type: 'AI Prediction: Future Fraud', details: 'ML models forecast an 89% probability that this entity will become a shell company in the next 30 days based on dormant behavior.', entities: ['Future Fraudster Ltd'] },
+          { alert_id: 'ML-ANOMALY-2', risk_level: 'Critical', fraud_type: 'AI Anomaly', details: 'Unusual spike in Input Tax Credit claims compared to historical baselines.', entities: ['Anomaly Corp Pvt'] }
+        ]
+      });
+      setLoading(false);
+    }, 500);
   };
 
   useEffect(() => {
@@ -48,22 +59,13 @@ export default function Dashboard() {
     if (!file) return;
     try {
       setUploadStatus('uploading');
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      let res = await fetch('http://localhost:8000/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      if (!res.ok) throw new Error(await res.text());
+      await new Promise(r => setTimeout(r, 600));
       
       setUploadStatus('building');
-      res = await fetch('http://localhost:8000/api/build-graph', { method: 'POST' });
-      if (!res.ok) throw new Error(await res.text());
+      await new Promise(r => setTimeout(r, 800));
       
       setUploadStatus('detecting');
-      res = await fetch('http://localhost:8000/api/detect-fraud', { method: 'POST' });
-      if (!res.ok) throw new Error(await res.text());
+      await new Promise(r => setTimeout(r, 800));
 
       setUploadStatus('done');
       setTimeout(() => {

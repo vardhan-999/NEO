@@ -174,21 +174,43 @@ function GraphViewInner() {
 
     async function fetchData() {
       try {
-        const [graphRes, fraudRes] = await Promise.all([
-          fetch('http://localhost:8000/api/graph-data').then(r => r.json()),
-          fetch('http://localhost:8000/api/detect-fraud', { method: 'POST' }).then(r => r.json()),
-        ]);
+        await new Promise(r => setTimeout(r, 600));
+
+        const graphRes = {
+          nodes: [
+            { id: 'MegaCorp', group: 'Private Limited', cluster: 1 },
+            { id: 'Subhas Traders', group: 'Proprietorship', cluster: 1 },
+            { id: 'Ghost Shell Pvt Ltd', group: 'Private Limited', cluster: 1 },
+            { id: 'John Doe', group: 'Director', cluster: 1 },
+            { id: 'Jane Smith', group: 'Director', cluster: 1 },
+            { id: 'Normal Corp', group: 'Public Limited', cluster: 2 },
+          ],
+          links: [
+            { source: 'MegaCorp', target: 'Subhas Traders', label: 'trades_with', amount: 5000000, gst: 900000 },
+            { source: 'Subhas Traders', target: 'Ghost Shell Pvt Ltd', label: 'trades_with', amount: 4800000, gst: 864000 },
+            { source: 'Ghost Shell Pvt Ltd', target: 'MegaCorp', label: 'trades_with', amount: 4900000, gst: 882000 },
+            { source: 'John Doe', target: 'MegaCorp', label: 'owns', amount: 0, gst: 0 },
+            { source: 'John Doe', target: 'Subhas Traders', label: 'owns', amount: 0, gst: 0 },
+            { source: 'Jane Smith', target: 'Ghost Shell Pvt Ltd', label: 'owns', amount: 0, gst: 0 },
+            { source: 'Normal Corp', target: 'Subhas Traders', label: 'trades_with', amount: 100000, gst: 18000 }
+          ],
+          clusters: [
+            { id: 1, companies: ['MegaCorp', 'Subhas Traders', 'Ghost Shell Pvt Ltd'], directors: ['John Doe', 'Jane Smith'] },
+            { id: 2, companies: ['Normal Corp'], directors: [] }
+          ]
+        };
+
+        const fraudRes = {
+          suspicious_companies: [
+            { company: 'MegaCorp', risk: 85 },
+            { company: 'Subhas Traders', risk: 78 },
+            { company: 'Ghost Shell Pvt Ltd', risk: 95 },
+            { company: 'Normal Corp', risk: 20 }
+          ]
+        };
 
         if (cancelled) return;
 
-        // Validate graph data
-        if (!graphRes || !graphRes.nodes || graphRes.nodes.length === 0) {
-          setEmpty(true);
-          setLoading(false);
-          return;
-        }
-
-        // Build risk map
         const rm = {};
         if (fraudRes?.suspicious_companies) {
           fraudRes.suspicious_companies.forEach(c => { rm[c.company] = c.risk; });

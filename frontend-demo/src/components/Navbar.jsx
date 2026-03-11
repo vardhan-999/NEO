@@ -54,13 +54,9 @@ export default function Navbar() {
             const btn = document.getElementById('sim-btn');
             const ogText = btn.innerHTML;
             btn.innerHTML = '<span class="animate-pulse">Simulating...</span>';
-            try {
-              await fetch('http://localhost:8000/api/simulate', { method: 'POST' });
+            setTimeout(() => {
               window.location.reload();
-            } catch (err) {
-              console.error(err);
-              btn.innerHTML = ogText;
-            }
+            }, 1000);
           }}
           id="sim-btn"
           className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600/50 to-red-600/50 hover:from-purple-500/60 hover:to-red-500/60 border border-red-500/30 text-white rounded-lg transition-all duration-300 font-bold text-sm shadow-[0_0_10px_rgba(239,68,68,0.2)]"

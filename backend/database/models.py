@@ -3,10 +3,10 @@ import urllib.parse
 from sqlalchemy import create_engine, Column, Integer, String, Float
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-password = urllib.parse.quote_plus('Anji@521')
-DATABASE_URL = os.getenv("DATABASE_URL", f"postgresql://postgres:{password}@localhost:5432/gst_fraud")
+password = urllib.parse.quote_plus('password')
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./gst_fraud.db")
 
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False} if "sqlite" in DATABASE_URL else {})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 

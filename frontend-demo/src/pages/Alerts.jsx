@@ -8,10 +8,17 @@ export default function Alerts() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/detect-fraud', { method: 'POST' })
-      .then(res => res.json())
-      .then(d => { setAlerts(d.alerts || []); setLoading(false); })
-      .catch(err => { console.error(err); setLoading(false); });
+    setLoading(true);
+    setTimeout(() => {
+      setAlerts([
+        { alert_id: 'CT-MegaCorp', risk_level: 'High', fraud_type: 'Circular Trading', details: 'Detected a 3-hop circular trading loop involving MegaCorp and 2 other entities.' },
+        { alert_id: 'SD-Subhas Traders', risk_level: 'High', fraud_type: 'Shared Director Syndicate', details: 'A director associated with Subhas Traders manages 5 other entities with suspicious transaction volumes.' },
+        { alert_id: 'FV-Ghost Shell Pvt Ltd', risk_level: 'Critical', fraud_type: 'Fake Invoice (No E-way Bill)', details: 'High volume of transactions without corresponding E-way bills detected for Ghost Shell Pvt Ltd.' },
+        { alert_id: 'ML-ANOMALY-1', risk_level: 'High', fraud_type: 'AI Prediction: Future Fraud', details: 'ML models forecast an 89% probability that this entity will become a shell company in the next 30 days based on dormant behavior.' },
+        { alert_id: 'ML-ANOMALY-2', risk_level: 'Critical', fraud_type: 'AI Anomaly: ITC Mismatch', details: 'Unusual spike in Input Tax Credit claims compared to historical baselines. Flagged for audit.' }
+      ]);
+      setLoading(false);
+    }, 400);
   }, []);
 
   if (loading) return <div className="text-center mt-20 animate-pulse text-primary">Fetching logs...</div>;

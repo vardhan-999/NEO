@@ -4,6 +4,7 @@ from api.upload_data import router as upload_router
 from api.build_graph import router as build_graph_router
 from api.detect_fraud import router as detect_fraud_router
 from api.graph_data import router as graph_data_router
+from api.investigate import router as investigate_router
 
 app = FastAPI(title="GST Fraud App")
 
@@ -20,6 +21,7 @@ app.include_router(upload_router, prefix="/api")
 app.include_router(build_graph_router, prefix="/api")
 app.include_router(detect_fraud_router, prefix="/api")
 app.include_router(graph_data_router, prefix="/api")
+app.include_router(investigate_router, prefix="/api")
 
 @app.get("/")
 def root():

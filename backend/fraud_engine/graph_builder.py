@@ -41,9 +41,30 @@ def build_graph_from_db(transactions):
 def get_graph_data():
     nodes = []
     edges = []
+    clusters: dict = {}
     
+    # Compute Louvain communities
+    try:
+
+        import community.community_louvain as community_louvain
+        undirected_G = nx.Graph(G) # Convert to simple undirected graph for Louvain
+        partition = community_louvain.best_partition(undirected_G)
+    except Exception as e:
+        print("Louvain error:", e)
+        partition = {}
+
     for n, data in G.nodes(data=True):
-        nodes.append({"id": n, "group": data.get("type", "Unknown")})
+        cluster_id = partition.get(n, 0)
+        group = data.get("type", "Unknown")
+        nodes.append({"id": n, "group": group, "cluster": cluster_id})
+        
+        # Build cluster summaries
+        if cluster_id not in clusters:
+            clusters[cluster_id] = {"id": cluster_id, "companies": [], "directors": []}
+        if group == "Director":
+            clusters[cluster_id]["directors"].append(n)
+        else:
+            clusters[cluster_id]["companies"].append(n)
         
     for u, v, data in G.edges(data=True):
         edge_data = {"source": u, "target": v, "label": data.get("type", "")}
@@ -53,4 +74,7 @@ def get_graph_data():
             edge_data["gst"] = data["gst"]
         edges.append(edge_data)
         
-    return {"nodes": nodes, "links": edges}
+    # Format clusters list
+    cluster_list = list(clusters.values())
+        
+    return {"nodes": nodes, "links": edges, "clusters": cluster_list}

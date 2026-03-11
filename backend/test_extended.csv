@@ -1,0 +1,25 @@
+seller,buyer,amount,gst,director
+CompanyA,CompanyB,1000,180,John Doe
+CompanyC,CompanyD,2000,360,Jane Smith
+CompanyB,CompanyE,1500,270,John Doe
+NormalBiz1,NormalBiz2,50000,9000,Alice Walker
+NormalBiz2,RetailerA,48000,8640,Bob Evans
+# Circular Trading Ring (A -> B -> C -> A)
+CircTrade1,CircTrade2,500000,90000,Charlie Brown
+CircTrade2,CircTrade3,495000,89100,David Green
+CircTrade3,CircTrade1,490000,88200,Eva Black
+# Shared Director / Shell Companies Network
+ShellCoX,ShellCoY,250000,45000,Mr. Dodgy
+ShellCoY,ShellCoZ,245000,44100,Mr. Dodgy
+ShellCoZ,NormalBiz1,100000,18000,Mr. Dodgy
+# High Risk / Sudden Spike Pattern
+SpikeCorp,ShellCoX,900000,162000,Xavier XYZ
+SpikeCorp,CircTrade1,850000,153000,Xavier XYZ
+SpikeCorp,NormalBiz2,750000,135000,Xavier XYZ
+# Another small circular ring
+RingAlpha,RingBeta,120000,21600,Sam Fisher
+RingBeta,RingGamma,118000,21240,Nancy Drew
+RingGamma,RingAlpha,116000,20880,Peter Pan
+# More normal transactions
+StoreLeft,StoreRight,4000,720,Jimmy Johns
+StoreRight,Customer1,4500,810,Mary Poppins

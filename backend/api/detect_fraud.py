@@ -38,11 +38,11 @@ async def detect_fraud(db: Session = Depends(get_db)):
         db.commit()
     
     # 3. Risk Scoring
-    risk_scores = calculate_risk_scores(alerts, suspicious_companies)
+    scores, reasons = calculate_risk_scores(alerts, list(suspicious_companies))
     
     # Summarize top risk companies
-    high_risk = sorted(risk_scores.items(), key=lambda x: x[1], reverse=True)[:10]
-    high_risk_list = [{"company": k, "risk": v} for k, v in high_risk]
+    high_risk = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:10]
+    high_risk_list = [{"company": k, "risk": v, "reasons": reasons[k]} for k, v in high_risk]
 
     return {
         "message": "Fraud detection complete",
