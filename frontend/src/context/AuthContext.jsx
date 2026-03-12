@@ -6,7 +6,7 @@ export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const storedAuth = localStorage.getItem('neotrace_auth');
+    const storedAuth = localStorage.getItem('auth');
     if (storedAuth === 'true') {
       setIsAuthenticated(true);
     }
@@ -14,12 +14,12 @@ export function AuthProvider({ children }) {
 
   const login = () => {
     setIsAuthenticated(true);
-    localStorage.setItem('neotrace_auth', 'true');
+    localStorage.setItem('auth', 'true');
   };
 
   const logout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem('neotrace_auth');
+    localStorage.removeItem('auth');
   };
 
   return (

@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import GraphView from './pages/GraphView';
 import Alerts from './pages/Alerts';
 import Investigation from './pages/Investigation';
+import InvestigationLab from './pages/InvestigationLab';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 function ProtectedRoute({ children }) {
@@ -30,6 +31,7 @@ function App() {
               <Route path="/graph" element={<ProtectedRoute><GraphView /></ProtectedRoute>} />
               <Route path="/alerts" element={<ProtectedRoute><Alerts /></ProtectedRoute>} />
               <Route path="/investigate/:nodeId" element={<ProtectedRoute><Investigation /></ProtectedRoute>} />
+              <Route path="/investigation-lab" element={<ProtectedRoute><InvestigationLab /></ProtectedRoute>} />
             </Routes>
           </main>
           

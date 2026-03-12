@@ -1,24 +1,35 @@
-import { NavLink } from 'react-router-dom';
-import { Shield, Home, Upload, BarChart, Network, Bell, Activity } from 'lucide-react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { Shield, Home, BarChart, Network, Bell, Search, LogIn, LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
 import clsx from 'clsx';
 import { useAuth } from '../context/AuthContext';
-import { LogOut } from 'lucide-react';
 
 export default function Navbar() {
   const { isAuthenticated, logout } = useAuth();
-  
-  const links = [
+  const navigate = useNavigate();
+
+  const publicLinks = [
     { to: '/', label: 'Home', icon: Home },
+  ];
+
+  const protectedLinks = [
     { to: '/dashboard', label: 'Dashboard', icon: BarChart },
     { to: '/graph', label: 'Graph View', icon: Network },
     { to: '/alerts', label: 'Alerts', icon: Bell },
+    { to: '/investigation-lab', label: 'Investigation Lab', icon: Search },
   ];
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  const visibleLinks = isAuthenticated ? [...publicLinks, ...protectedLinks] : publicLinks;
 
   return (
     <nav className="glass-panel mx-6 mt-6 px-6 py-4 flex items-center justify-between sticky top-6 z-50">
       <div className="flex items-center space-x-3">
-        <motion.div 
+        <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
           className="text-primary"
@@ -29,54 +40,47 @@ export default function Navbar() {
           NeoTrace GST
         </h1>
       </div>
-      
-      <div className="flex space-x-1">
-        {links.map(({ to, label, icon: Icon }) => (
+
+      <div className="flex items-center space-x-1">
+        {visibleLinks.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}
             className={({ isActive }) => clsx(
-              "flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium text-sm",
-              isActive 
-                ? "bg-primary/20 text-blue-400 neo-glow" 
-                : "text-textMuted hover:bg-surface hover:text-white"
+              'flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium text-sm',
+              isActive
+                ? 'bg-primary/20 text-blue-400 neo-glow'
+                : 'text-textMuted hover:bg-surface hover:text-white'
             )}
           >
             <Icon size={18} />
             <span>{label}</span>
           </NavLink>
         ))}
-        
-        <div className="w-px bg-white/10 mx-2" />
-        
-        <button 
-          onClick={async () => {
-            const btn = document.getElementById('sim-btn');
-            const ogText = btn.innerHTML;
-            btn.innerHTML = '<span class="animate-pulse">Simulating...</span>';
-            try {
-              await fetch('http://localhost:8000/api/simulate', { method: 'POST' });
-              window.location.reload();
-            } catch (err) {
-              console.error(err);
-              btn.innerHTML = ogText;
-            }
-          }}
-          id="sim-btn"
-          className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600/50 to-red-600/50 hover:from-purple-500/60 hover:to-red-500/60 border border-red-500/30 text-white rounded-lg transition-all duration-300 font-bold text-sm shadow-[0_0_10px_rgba(239,68,68,0.2)]"
-        >
-          <Activity size={18} />
-          <span>Run Simulation</span>
-        </button>
 
-        {isAuthenticated && (
-          <button 
-            onClick={logout}
-            className="flex items-center space-x-2 px-4 py-2 bg-surface hover:bg-white/10 border border-white/10 text-white rounded-lg transition-all duration-300 font-medium text-sm ml-2"
+        <div className="w-px bg-white/10 mx-2" />
+
+        {isAuthenticated ? (
+          <button
+            onClick={handleLogout}
+            className="flex items-center space-x-2 px-4 py-2 bg-surface hover:bg-white/10 border border-white/10 text-white rounded-lg transition-all duration-300 font-medium text-sm"
           >
             <LogOut size={18} className="text-red-400" />
             <span>Logout</span>
           </button>
+        ) : (
+          <NavLink
+            to="/login"
+            className={({ isActive }) => clsx(
+              'flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium text-sm border',
+              isActive
+                ? 'bg-primary/20 text-blue-400 border-blue-500/30 neo-glow'
+                : 'bg-primary/10 text-blue-300 border-primary/30 hover:bg-primary/20 hover:text-white'
+            )}
+          >
+            <LogIn size={18} />
+            <span>Login</span>
+          </NavLink>
         )}
       </div>
     </nav>

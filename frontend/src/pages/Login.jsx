@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Shield, Mail, Lock, LogIn, Zap } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -8,8 +8,11 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Already logged in — bounce to dashboard
+  if (isAuthenticated) return <Navigate to="/dashboard" replace />;
 
   const handleLogin = (e) => {
     e.preventDefault();

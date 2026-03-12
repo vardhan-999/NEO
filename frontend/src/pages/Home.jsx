@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ShieldAlert, Network, Zap, ReceiptText, Ghost, AlertTriangle, ArrowRight } from 'lucide-react';
 import FraudSimulationModal from '../components/FraudSimulationModal';
+import { useAuth } from '../context/AuthContext';
 
 export default function Home() {
   const [selectedFraud, setSelectedFraud] = useState(null);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  const handleStartEngine = () => {
+    navigate(isAuthenticated ? '/dashboard' : '/login');
+  };
 
   const fraudTypes = [
     {
@@ -102,16 +109,15 @@ export default function Home() {
             Upload your GST transaction datasets. Our advanced NetworkX & React engine maps every node, identifying shell companies, circular trading, and multi-director syndicates in milliseconds.
           </p>
 
-          <Link to="/login">
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-primary text-white rounded-xl font-bold text-lg flex items-center space-x-3 mx-auto transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] border border-primary/50"
-            >
-              <span>Start Analysis Engine</span>
-              <Zap className="fill-white" size={20} />
-            </motion.button>
-          </Link>
+          <motion.button
+            onClick={handleStartEngine}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 py-4 bg-primary text-white rounded-xl font-bold text-lg flex items-center space-x-3 mx-auto transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] border border-primary/50"
+          >
+            <span>Start Analysis Engine</span>
+            <Zap className="fill-white" size={20} />
+          </motion.button>
         </motion.div>
       </div>
 

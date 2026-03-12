@@ -6,3 +6,6 @@ pymongo
 motor
 python-multipart
 pydantic
+scikit-learn
+websockets
+sqlalchemy
